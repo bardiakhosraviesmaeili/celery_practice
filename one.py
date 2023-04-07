@@ -1,6 +1,6 @@
 import time
 from celery.utils.log import get_task_logger
-from celery import Celery
+from celery import Celery, chain, group
 
 app = Celery('one', broker="amqp://guest:guest@localhost:5672", backend='rpc://')
 
@@ -38,3 +38,10 @@ def sub(a, b):
 
 
 add.apply_async((8, 4), link=sub.signature((5, 3), immutable=True))
+
+# chain
+result = chain(add.s(3, 4), sub.s(6))
+print(result().get())
+# group
+result2 = group(add.s(3, 4), sub.s(6, 4)).apply_async()
+print(result2.get())
