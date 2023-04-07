@@ -2,7 +2,7 @@ import time
 from celery.utils.log import get_task_logger
 from celery import Celery
 
-app = Celery('one', broker="amqp://guest:guest@localhost:5672")
+app = Celery('one', broker="amqp://guest:guest@localhost:5672", backend='rpc://')
 logger = get_task_logger(__name__)
 
 
