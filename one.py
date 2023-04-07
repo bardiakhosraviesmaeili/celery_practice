@@ -3,6 +3,17 @@ from celery.utils.log import get_task_logger
 from celery import Celery
 
 app = Celery('one', broker="amqp://guest:guest@localhost:5672", backend='rpc://')
+
+app.conf.update(
+    task_time_limit=60,
+    task_soft_time_limit=50,
+    worker_concurrency=70,
+    worker_prefetch_multiplier=1,
+    task_ignore_result=True,
+    task_always_eager=True,
+    task_acks_late=True
+
+)
 logger = get_task_logger(__name__)
 
 
